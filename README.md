@@ -1,117 +1,94 @@
-# Real-Time Surgical Instrument Detection using YOLOv8
+# YOLOv8 Surgical Instrument Detection in C#
 
-This project utilizes the YOLOv8 model to detect and classify common surgical instruments from images and video streams. It's trained on a custom dataset to identify 4 classes of tools, showcasing a practical application of computer vision in the medical technology field.
+![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
+![Language C#](https://img.shields.io/badge/Language-C%23-blueviolet)
+![Language Python](https://img.shields.io/badge/Language-Python-blue)
 
-![Detection Demo](https://i.imgur.com/rLzG9qL.jpg)
+This repository contains a complete project for detecting surgical instruments from images. The project is divided into two main parts:
+1.  A **Python pipeline** for training a custom YOLOv8 object detection model.
+2.  A **C#/.NET Windows Forms application** that uses the trained model to perform real-time inference on user-provided images.
+
+![Detection Demo]([https://i.imgur.com/rLzG9qL.jpg](https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector/blob/main/inference_results/test_image.jpg))
 
 
 ## 📋 Key Features
 
-- **Real-time detection** of 4 classes of surgical instruments.
-- Built with **YOLOv8m (Medium)** for a strong balance between accuracy and speed.
-- Trained and validated on the "Labeled Surgical Tools and Images" dataset.
-- Includes scripts for easy data organization, training, and inference.
+- **End-to-End Workflow:** Covers the entire process from data preparation and model training to final application deployment.
+- **High-Performance Model:** Utilizes the powerful YOLOv8 architecture, fine-tuned on a specific medical dataset.
+- **User-Friendly Interface:** A simple and intuitive desktop application built in C# for easy testing and demonstration.
+- **Cross-Platform Model:** The project relies on the **ONNX (Open Neural Network Exchange)** format, allowing the Python-trained model to be used seamlessly in the C#/.NET environment.
+
+## 🏗️ Project Architecture
+
+The project is structured in two parts:
+
+1.  **Model Training (Python)**:
+    - `organize_dataset.py`: A script to automatically sort the raw dataset into `train`, `val`, and `test` folders.
+    - `data.yaml`: The YOLO configuration file defining dataset paths and classes.
+    - `train.py`: The main script to train the YOLOv8 model.
+    - The output of this pipeline is a trained model, which should be converted to `.onnx` format for use in the C# application.
+
+2.  **Inference Application (C#)**:
+    - `Surgical-Instrument-Detector.sln`: The Visual Studio solution file.
+    - The C# project loads the `.onnx` model using the `OnnxRuntime` and performs inference on images selected by the user, drawing bounding boxes around detected instruments.
 
 ## 🛠️ Technology Stack
 
-- **Python 3.9+**
-- **PyTorch**
-- **Ultralytics YOLOv11**
-- **OpenCV**
-- **NumPy**
-- **PyYAML**
+- **Inference Application:** C#, .NET Framework, Windows Forms, OnnxRuntime
+- **Model Training:** Python, PyTorch, Ultralytics YOLOv8, OpenCV
 
 ## 📂 Dataset
 
-This project is trained on the **Labeled Surgical Tools and Images** dataset, which was created for a Master's Thesis. It contains over 3,000 images with detailed annotations for 4 classes of surgical tools.
-
+This project is trained on the **Labeled Surgical Tools and Images** dataset from Kaggle.
 - **Dataset Source:** [Kaggle - Labeled Surgical Tools and Images](https://www.kaggle.com/datasets/dlovado/labeled-surgical-tools)
-- **Classes:**
-  1.  `Scalpel`
-  2.  `Straight Dissection Clamp`
-  3.  `Straight Mayo Scissor`
-  4.  `Curved Mayo Scissor`
+- **Classes:** `Scalpel`, `Straight Dissection Clamp`, `Straight Mayo Scissor`, `Curved Mayo Scissor`.
 
 ## 🚀 Getting Started
 
-Follow these instructions to set up the project on your local machine.
+You can either run the final C# application or replicate the full training process.
 
-### Prerequisites
-
-- An **NVIDIA GPU** with CUDA and cuDNN installed is highly recommended for training.
-- Python 3.9 or later.
-
-### Installation
+### A. Running the C# Application (Inference)
 
 1.  **Clone the repository:**
     ```sh
-    git clone [https://github.com/your-username/your-repository-name.git](https://github.com/your-username/your-repository-name.git)
-    cd your-repository-name
+    git clone [https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector.git](https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector.git)
+    cd Surgical-Instrument-Detector
     ```
 
-2.  **Create and activate a Python virtual environment:**
+2.  **Install Git LFS:** This is required to download the large model files.
     ```sh
-    python -m venv venv
-    # On Windows
-    .\venv\Scripts\activate
-    # On macOS/Linux
-    source venv/bin/activate
+    git lfs install
+    git lfs pull
     ```
 
-3.  **Install required libraries:**
-    ```sh
-    pip install -r requirements.txt
-    ```
- 
+3.  **Open in Visual Studio:** Open the `Surgical-Instrument-Detector.sln` file in Visual Studio.
 
-4.  **Download and Organize Dataset:**
-    - Download the dataset from the [Kaggle link](https://www.kaggle.com/datasets/dlovado/labeled-surgical-tools) and unzip it into a folder named `source_dataset`.
-    - Run the provided Python script to automatically organize the data into `train`, `val`, and `test` sets:
-      ```sh
-      python organize_dataset.py
-      ```
+4.  **Restore Packages:** Restore the necessary NuGet packages (like `OnnxRuntime`).
 
-## ⚙️ Usage
+5.  **Build and Run:** Build the solution and run the application. Use the buttons in the application to load an image and see the detection results.
 
-### Training
+### B. Replicating the Training Pipeline (Optional)
 
-To train the model from scratch using the prepared dataset, run the training script. All training parameters can be adjusted within this file.
-
-```sh
-python train.py
-```
-The trained model weights (especially `best.pt`) will be saved in the `runs/detect/train/weights/` directory.
-
-### Inference
-
-To run inference on a new image, video, or webcam stream, use the `predict` command with your best-trained model.
-
-- **On an image:**
-  ```sh
-  yolo predict model=runs/detect/train/weights/best.pt source='path/to/your/image.jpg'
-  ```
-
-- **On a video:**
-  ```sh
-  yolo predict model=runs/detect/train/weights/best.pt source='path/to/your/video.mp4'
-  ```
+1.  Follow steps 1-2 from the section above.
+2.  Set up a Python environment (e.g., `python -m venv venv`).
+3.  Install dependencies: `pip install -r requirements.txt` (You should create this file using `pip freeze > requirements.txt`).
+4.  Download the dataset from the Kaggle link and use `organize_dataset.py` to structure it.
+5.  Run the training script: `python train.py`.
+6.  Convert the best-trained model (`best.pt`) to ONNX format.
 
 ## 📈 Results
 
 After training for 100 epochs, the YOLOv8m model achieved the following performance on the validation set.
 
-| Metric    | Value     |
-| :-------- | :-------- |
+| Metric     | Value     |
+| :--------- | :-------- |
 | **mAP50-95** | **`0.XX`** |
 | **mAP50** | **`0.XX`** |
-| Precision | `0.XX`    |
-| Recall    | `0.XX`    |
+| Precision  | `0.XX`    |
+| Recall     | `0.XX`    |
 
 
-## 📄 License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 ## 🙏 Acknowledgments
 
-A special thanks to **Danilo L. V. et al.** for creating and sharing the high-quality "Labeled Surgical Tools and Images" dataset, which made this project possible.
+A special thanks to **Danilo L. V. et al.** for creating and sharing the high-quality "Labeled Surgical Tools and Images" dataset.
