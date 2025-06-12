@@ -8,7 +8,7 @@ This repository contains a complete project for detecting surgical instruments f
 1.  A **Python pipeline** for training a custom YOLOv11 object detection model.
 2.  A **C#/.NET Windows Forms application** that uses the trained model to perform real-time inference on user-provided images.
 
-![Detection Demo]([https://i.imgur.com/rLzG9qL.jpg](https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector/blob/main/inference_results/test_image.jpg))
+![Detection Demo]([https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector/blob/main/inference_results/test_image.jpg])
 
 
 ## 📋 Key Features
