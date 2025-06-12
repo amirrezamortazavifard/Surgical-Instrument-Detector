@@ -1,11 +1,11 @@
-# YOLOv8 Surgical Instrument Detection in C#
+# YOLOv11 Surgical Instrument Detection in C#
 
 ![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Language C#](https://img.shields.io/badge/Language-C%23-blueviolet)
 ![Language Python](https://img.shields.io/badge/Language-Python-blue)
 
 This repository contains a complete project for detecting surgical instruments from images. The project is divided into two main parts:
-1.  A **Python pipeline** for training a custom YOLOv8 object detection model.
+1.  A **Python pipeline** for training a custom YOLOv11 object detection model.
 2.  A **C#/.NET Windows Forms application** that uses the trained model to perform real-time inference on user-provided images.
 
 ![Detection Demo]([https://i.imgur.com/rLzG9qL.jpg](https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector/blob/main/inference_results/test_image.jpg))
@@ -14,7 +14,7 @@ This repository contains a complete project for detecting surgical instruments f
 ## 📋 Key Features
 
 - **End-to-End Workflow:** Covers the entire process from data preparation and model training to final application deployment.
-- **High-Performance Model:** Utilizes the powerful YOLOv8 architecture, fine-tuned on a specific medical dataset.
+- **High-Performance Model:** Utilizes the powerful YOLOv11 architecture, fine-tuned on a specific medical dataset.
 - **User-Friendly Interface:** A simple and intuitive desktop application built in C# for easy testing and demonstration.
 - **Cross-Platform Model:** The project relies on the **ONNX (Open Neural Network Exchange)** format, allowing the Python-trained model to be used seamlessly in the C#/.NET environment.
 
@@ -25,7 +25,7 @@ The project is structured in two parts:
 1.  **Model Training (Python)**:
     - `organize_dataset.py`: A script to automatically sort the raw dataset into `train`, `val`, and `test` folders.
     - `data.yaml`: The YOLO configuration file defining dataset paths and classes.
-    - `train.py`: The main script to train the YOLOv8 model.
+    - `train.py`: The main script to train the YOLOv11 model.
     - The output of this pipeline is a trained model, which should be converted to `.onnx` format for use in the C# application.
 
 2.  **Inference Application (C#)**:
@@ -35,7 +35,7 @@ The project is structured in two parts:
 ## 🛠️ Technology Stack
 
 - **Inference Application:** C#, .NET Framework, Windows Forms, OnnxRuntime
-- **Model Training:** Python, PyTorch, Ultralytics YOLOv8, OpenCV
+- **Model Training:** Python, PyTorch, Ultralytics YOLOv11, OpenCV
 
 ## 📂 Dataset
 
@@ -78,7 +78,7 @@ You can either run the final C# application or replicate the full training proce
 
 ## 📈 Results
 
-After training for 100 epochs, the YOLOv8m model achieved the following performance on the validation set.
+After training for 100 epochs, the YOLOv11l model achieved the following performance on the validation set.
 
 | Metric     | Value     |
 | :--------- | :-------- |
