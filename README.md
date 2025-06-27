@@ -1,94 +1,132 @@
-# YOLOv11 Surgical Instrument Detection in C#
+# Surgical Tool Detector 🩺🤖
 
-![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
-![Language C#](https://img.shields.io/badge/Language-C%23-blueviolet)
-![Language Python](https://img.shields.io/badge/Language-Python-blue)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![.NET Version](https://img.shields.io/badge/.NET-8.0-blueviolet.svg)](https://dotnet.microsoft.com/)
+[![C# Version](https://img.shields.io/badge/C%23-12-blue.svg)](https://learn.microsoft.com/en-us/dotnet/csharp/)
+[![Python Version](https://img.shields.io/badge/Python-3.9+-brightgreen.svg)](https://www.python.org/)
+[![Status](https://img.shields.io/badge/Status-Completed-success.svg)](https://github.com/am-mortazavifard/Surgical-Detector)
 
-This repository contains a complete project for detecting surgical instruments from images. The project is divided into two main parts:
-1.  A **Python pipeline** for training a custom YOLOv11 object detection model.
-2.  A **C#/.NET Windows Forms application** that uses the trained model to perform real-time inference on user-provided images.
+An intelligent desktop application for the **real-time detection** of surgical instruments using a **YOLOv11** AI model and a modern user interface built with **C# (WPF)**.
 
-![Detection Demo]([https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector/blob/main/inference_results/test_image.jpg])
+This project was developed with the goal of increasing accuracy and speed in surgical environments, and also serves as a powerful educational example of integrating a Python-based AI workflow with high-performance .NET applications.
 
+![App Demo GIF](https://i.imgur.com/Qk7sO9v.gif)
+*(This is a sample GIF. You can replace it with a recording of your own application in action.)*
 
-## 📋 Key Features
+---
 
-- **End-to-End Workflow:** Covers the entire process from data preparation and model training to final application deployment.
-- **High-Performance Model:** Utilizes the powerful YOLOv11 architecture, fine-tuned on a specific medical dataset.
-- **User-Friendly Interface:** A simple and intuitive desktop application built in C# for easy testing and demonstration.
-- **Cross-Platform Model:** The project relies on the **ONNX (Open Neural Network Exchange)** format, allowing the Python-trained model to be used seamlessly in the C#/.NET environment.
+## ✨ Core Features
+
+* **Dual Detection Modes:**
+    * **Image-Based Detection:** Analyze static image files (`.jpg`, `.png`, etc.).
+    * **Live Camera Detection:** Process a real-time video feed from any connected webcam.
+* **Multi-Camera Support:** Automatically detects all connected cameras and allows the user to choose their desired device.
+* **Powerful AI Model:** Utilizes a custom-trained **YOLOv11** model, exported to the **ONNX** format for maximum performance and compatibility.
+* **Modern & Responsive UI:**
+    * Built with **WPF**, featuring a dark theme inspired by surgical environments.
+    * AI processing runs on a background thread to prevent UI freezing and ensure a smooth, responsive experience.
+* **Graphical Result Visualization:** Renders bounding boxes, class labels, and confidence scores clearly and colorfully on the image or live video feed.
+
+---
 
 ## 🏗️ Project Architecture
 
-The project is structured in two parts:
+This project is divided into two main, independent parts:
 
-1.  **Model Training (Python)**:
-    - `organize_dataset.py`: A script to automatically sort the raw dataset into `train`, `val`, and `test` folders.
-    - `data.yaml`: The YOLO configuration file defining dataset paths and classes.
-    - `train.py`: The main script to train the YOLOv11 model.
-    - The output of this pipeline is a trained model, which should be converted to `.onnx` format for use in the C# application.
+1.  **Part 1: AI Model Training (in the `python/` folder)**
+    * This section contains all the Python scripts for preparing the dataset, training the **YOLOv11** model, and finally exporting the trained model to the `.onnx` format.
+    * This entire workflow is built using Python and the PyTorch framework.
 
-2.  **Inference Application (C#)**:
-    - `Surgical-Instrument-Detector.sln`: The Visual Studio solution file.
-    - The C# project loads the `.onnx` model using the `OnnxRuntime` and performs inference on images selected by the user, drawing bounding boxes around detected instruments.
+2.  **Part 2: Desktop Application (in the `SurgicalDetector/` folder)**
+    * The core application and its user interface, written in **C#** with the **WPF** framework.
+    * C# was chosen for this part due to its **superior performance for building responsive desktop applications** compared to Python.
+    * The application loads and executes the `.onnx` model generated in the first part to perform inference.
+
+```
+surgical-detector/
+├── 📂 python/              # Part 1: AI Model Training
+│   ├── train.py
+│   ├── data.yaml
+│   ├── test.py
+│   └── ...
+└── 📂 SurgicalDetector/     # Part 2: C# Desktop Application
+    ├── SurgicalDetector.sln
+    ├── SurgicalDetector/
+    └── ...
+```
+
+---
 
 ## 🛠️ Technology Stack
 
-- **Inference Application:** C#, .NET Framework, Windows Forms, OnnxRuntime
-- **Model Training:** Python, PyTorch, Ultralytics YOLOv11, OpenCV
+* **AI & Model Training (Python):**
+    * ![Python](https://img.shields.io/badge/Python-3.9-blue.svg?logo=python)
+    * ![PyTorch](https://img.shields.io/badge/PyTorch-2.0-ee4c2c.svg?logo=pytorch)
+    * **YOLOv11**
+    * OpenCV-Python
 
-## 📂 Dataset
+* **Desktop Application (C#):**
+    * ![CSharp](https://img.shields.io/badge/C%23-12-purple.svg?logo=c-sharp)
+    * **.NET 8**
+    * **Windows Presentation Foundation (WPF)**
+    * **Microsoft.ML.OnnxRuntime:** For running ONNX models.
+    * **OpenCvSharp4:** For image processing and camera interoperability.
 
-This project is trained on the **Labeled Surgical Tools and Images** dataset from Kaggle.
-- **Dataset Source:** [Kaggle - Labeled Surgical Tools and Images](https://www.kaggle.com/datasets/dlovado/labeled-surgical-tools)
-- **Classes:** `Scalpel`, `Straight Dissection Clamp`, `Straight Mayo Scissor`, `Curved Mayo Scissor`.
+---
 
-## 🚀 Getting Started
+## 🚀 Setup and Installation
 
-You can either run the final C# application or replicate the full training process.
-
-### A. Running the C# Application (Inference)
+To run this project, you will need the following prerequisites:
+* **.NET 8.0 SDK**
+* **Python 3.9** or higher
+* **Visual Studio 2022** with the ".NET desktop development" workload installed.
 
 1.  **Clone the repository:**
-    ```sh
-    git clone [https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector.git](https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector.git)
-    cd Surgical-Instrument-Detector
+    ```bash
+    git clone [https://github.com/amirrezamortazavifard/surgical-detector.git](https://github.com/amirrezamortazavifard/surgical-detector.git)
+    cd surgical-detector
     ```
 
-2.  **Install Git LFS:** This is required to download the large model files.
-    ```sh
-    git lfs install
-    git lfs pull
+2.  **Set up the Python environment (Optional - for re-training the model):**
+    ```bash
+    cd python
+    pip install -r requirements.txt
+    # To train the model, run the training script
+    python train.py
     ```
 
-3.  **Open in Visual Studio:** Open the `Surgical-Instrument-Detector.sln` file in Visual Studio.
+3.  **Set up the C# Application (Main Program):**
+    * Open the `SurgicalDetector/` folder and double-click `SurgicalDetector.sln` to open it in Visual Studio 2022.
+    * Visual Studio will automatically restore the required NuGet packages.
+    * **Rebuild the solution** (from the menu: Build > Rebuild Solution).
+    * Press **F5** or the Start button to run the application.
 
-4.  **Restore Packages:** Restore the necessary NuGet packages (like `OnnxRuntime`).
+---
 
-5.  **Build and Run:** Build the solution and run the application. Use the buttons in the application to load an image and see the detection results.
+## 🧠 AI Model Details
 
-### B. Replicating the Training Pipeline (Optional)
+* **Base Model:** The project uses a **YOLOv11** object detection model.
+* **Dataset:** The images used for training were sourced from **Kaggle**.
+* **Final Format:** After training, the model was converted to the **ONNX (Open Neural Network Exchange)** format. This allows the model to be run on various platforms, including in a C# environment, with high performance and without a dependency on Python.
 
-1.  Follow steps 1-2 from the section above.
-2.  Set up a Python environment (e.g., `python -m venv venv`).
-3.  Install dependencies: `pip install -r requirements.txt` (You should create this file using `pip freeze > requirements.txt`).
-4.  Download the dataset from the Kaggle link and use `organize_dataset.py` to structure it.
-5.  Run the training script: `python train.py`.
-6.  Convert the best-trained model (`best.pt`) to ONNX format.
+---
 
-## 📈 Results
+## 🗂️ Repository Contents
 
-After training for 100 epochs, the YOLOv11l model achieved the following performance on the validation set.
+This is a complete and comprehensive repository. By cloning it, you will have access to all of the following:
+* All **C# and Python source code.**
+* The project's **binary and executable files.**
+* The final, ready-to-use **`best.onnx` model.**
+* **Model training results and logs** (e.g., loss and accuracy charts).
 
-| Metric     | Value     |
-| :--------- | :-------- |
-| **mAP50-95** | **`0.XX`** |
-| **mAP50** | **`0.XX`** |
-| Precision  | `0.XX`    |
-| Recall     | `0.XX`    |
+---
 
+## ✍️ Author
 
+This project was created and developed by **Amirreza Mortazavifard**.
 
-## 🙏 Acknowledgments
+---
 
-A special thanks to **Danilo L. V. et al.** for creating and sharing the high-quality "Labeled Surgical Tools and Images" dataset.
+## 📜 License
+
+This project is licensed under the **MIT License**. See the `LICENSE` file for details.
