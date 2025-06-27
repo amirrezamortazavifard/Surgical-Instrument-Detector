@@ -1,0 +1,16 @@
+path: ./data
+
+# Directories for training, validation, and testing images (relative to 'path')
+train: images/train
+val: images/val
+test: images/test
+
+# Number of classes
+nc: 4
+
+# Class names in the correct order (0 to 3)
+names:
+  - Scalpel
+  - Straight Dissection Clamp
+  - Straight Mayo Scissor
+  - Curved Mayo Scissor

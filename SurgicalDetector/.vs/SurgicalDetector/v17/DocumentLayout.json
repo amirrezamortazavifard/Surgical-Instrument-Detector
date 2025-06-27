@@ -1,0 +1,107 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Fard\\Desktop\\Surgical-Instrument-Detector\\SurgicalDetector\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F51A22E5-018A-4E37-AA1D-BB4D6D8B9780}|SurgicalDetector\\SurgicalDetector.csproj|c:\\users\\fard\\desktop\\surgical-instrument-detector\\surgicaldetector\\surgicaldetector\\livedetectionwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F51A22E5-018A-4E37-AA1D-BB4D6D8B9780}|SurgicalDetector\\SurgicalDetector.csproj|solutionrelative:surgicaldetector\\livedetectionwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F51A22E5-018A-4E37-AA1D-BB4D6D8B9780}|SurgicalDetector\\SurgicalDetector.csproj|c:\\users\\fard\\desktop\\surgical-instrument-detector\\surgicaldetector\\surgicaldetector\\livedetectionwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{F51A22E5-018A-4E37-AA1D-BB4D6D8B9780}|SurgicalDetector\\SurgicalDetector.csproj|solutionrelative:surgicaldetector\\livedetectionwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F51A22E5-018A-4E37-AA1D-BB4D6D8B9780}|SurgicalDetector\\SurgicalDetector.csproj|c:\\users\\fard\\desktop\\surgical-instrument-detector\\surgicaldetector\\surgicaldetector\\imagedetectionwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F51A22E5-018A-4E37-AA1D-BB4D6D8B9780}|SurgicalDetector\\SurgicalDetector.csproj|solutionrelative:surgicaldetector\\imagedetectionwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F51A22E5-018A-4E37-AA1D-BB4D6D8B9780}|SurgicalDetector\\SurgicalDetector.csproj|c:\\users\\fard\\desktop\\surgical-instrument-detector\\surgicaldetector\\surgicaldetector\\imagedetectionwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{F51A22E5-018A-4E37-AA1D-BB4D6D8B9780}|SurgicalDetector\\SurgicalDetector.csproj|solutionrelative:surgicaldetector\\imagedetectionwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F51A22E5-018A-4E37-AA1D-BB4D6D8B9780}|SurgicalDetector\\SurgicalDetector.csproj|c:\\users\\fard\\desktop\\surgical-instrument-detector\\surgicaldetector\\surgicaldetector\\surgicaldetector.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{F51A22E5-018A-4E37-AA1D-BB4D6D8B9780}|SurgicalDetector\\SurgicalDetector.csproj|solutionrelative:surgicaldetector\\surgicaldetector.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LiveDetectionWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Fard\\Desktop\\Surgical-Instrument-Detector\\SurgicalDetector\\SurgicalDetector\\LiveDetectionWindow.xaml.cs",
+              "RelativeDocumentMoniker": "SurgicalDetector\\LiveDetectionWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Fard\\Desktop\\Surgical-Instrument-Detector\\SurgicalDetector\\SurgicalDetector\\LiveDetectionWindow.xaml.cs",
+              "RelativeToolTip": "SurgicalDetector\\LiveDetectionWindow.xaml.cs",
+              "ViewState": "AgIAAIEAAAAAAAAAAAAowBMAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-12T19:31:21.867Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LiveDetectionWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\Fard\\Desktop\\Surgical-Instrument-Detector\\SurgicalDetector\\SurgicalDetector\\LiveDetectionWindow.xaml",
+              "RelativeDocumentMoniker": "SurgicalDetector\\LiveDetectionWindow.xaml",
+              "ToolTip": "C:\\Users\\Fard\\Desktop\\Surgical-Instrument-Detector\\SurgicalDetector\\SurgicalDetector\\LiveDetectionWindow.xaml",
+              "RelativeToolTip": "SurgicalDetector\\LiveDetectionWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-06-12T19:30:47.191Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "SurgicalDetector",
+              "DocumentMoniker": "C:\\Users\\Fard\\Desktop\\Surgical-Instrument-Detector\\SurgicalDetector\\SurgicalDetector\\SurgicalDetector.csproj",
+              "RelativeDocumentMoniker": "SurgicalDetector\\SurgicalDetector.csproj",
+              "ToolTip": "C:\\Users\\Fard\\Desktop\\Surgical-Instrument-Detector\\SurgicalDetector\\SurgicalDetector\\SurgicalDetector.csproj",
+              "RelativeToolTip": "SurgicalDetector\\SurgicalDetector.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-06-12T19:15:41.935Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ImageDetectionWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\Fard\\Desktop\\Surgical-Instrument-Detector\\SurgicalDetector\\SurgicalDetector\\ImageDetectionWindow.xaml",
+              "RelativeDocumentMoniker": "SurgicalDetector\\ImageDetectionWindow.xaml",
+              "ToolTip": "C:\\Users\\Fard\\Desktop\\Surgical-Instrument-Detector\\SurgicalDetector\\SurgicalDetector\\ImageDetectionWindow.xaml",
+              "RelativeToolTip": "SurgicalDetector\\ImageDetectionWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-06-12T19:15:53.558Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ImageDetectionWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Fard\\Desktop\\Surgical-Instrument-Detector\\SurgicalDetector\\SurgicalDetector\\ImageDetectionWindow.xaml.cs",
+              "RelativeDocumentMoniker": "SurgicalDetector\\ImageDetectionWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\Fard\\Desktop\\Surgical-Instrument-Detector\\SurgicalDetector\\SurgicalDetector\\ImageDetectionWindow.xaml.cs",
+              "RelativeToolTip": "SurgicalDetector\\ImageDetectionWindow.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAABAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-12T19:16:25.215Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
