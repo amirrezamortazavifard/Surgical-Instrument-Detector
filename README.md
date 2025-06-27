@@ -10,8 +10,6 @@ An intelligent desktop application for the **real-time detection** of surgical i
 
 This project was developed with the goal of increasing accuracy and speed in surgical environments, and also serves as a powerful educational example of integrating a Python-based AI workflow with high-performance .NET applications.
 
-![App Demo GIF](https://i.imgur.com/Qk7sO9v.gif)
-*(This is a sample GIF. You can replace it with a recording of your own application in action.)*
 
 ---
 
