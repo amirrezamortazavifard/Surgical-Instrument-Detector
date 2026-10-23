@@ -9,6 +9,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Images\curved_mayo_scissor.jpg" />
+    <None Remove="Assets\Images\metzenbaum_scissors.jpg" />
+    <None Remove="Assets\Images\Scalpel.jpg" />
+    <None Remove="Assets\Images\straight_mayo_scissor.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Images\curved_mayo_scissor.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\metzenbaum_scissors.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\Scalpel.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Images\straight_mayo_scissor.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.10" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.22.0" />
     <PackageReference Include="Microsoft.ML.OnnxRuntime.Managed" Version="1.22.0" />
     <PackageReference Include="OpenCvSharp4" Version="4.11.0.20250507" />
@@ -21,6 +44,13 @@
     <None Update="best.onnx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="Data\instruments.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

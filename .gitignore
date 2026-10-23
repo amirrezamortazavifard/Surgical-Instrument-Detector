@@ -192,3 +192,24 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Visual Studio & .NET Build Artifacts
+.vs/
+[Bb]in/
+[Oo]bj/
+publish/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Local Agents & Scratch Files
+AGENT.md
+AGENTS.md
+.git/corrupt_*
+
+# Large Datasets & Local Training Runs
+Python/datasets/
+Python/runs/
+Python/surg/
+Python/*.txt

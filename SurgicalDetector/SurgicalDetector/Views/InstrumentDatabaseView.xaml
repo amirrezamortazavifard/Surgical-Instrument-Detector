@@ -1,0 +1,189 @@
+﻿<UserControl x:Class="SurgicalDetector.Views.InstrumentDatabaseView"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+xmlns:viewModels="clr-namespace:SurgicalDetector.ViewModels"
+mc:Ignorable="d"
+d:DataContext="{d:DesignInstance viewModels:InstrumentDatabaseViewModel}"
+d:DesignHeight="700" d:DesignWidth="1000">
+
+    <UserControl.Resources>
+        <Style x:Key="SearchTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource BrushSurfaceLight}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Padding" Value="10,12"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="CaretBrush" Value="{StaticResource BrushAccent}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="5" BorderThickness="0">
+                            <Grid>
+                                <ScrollViewer x:Name="PART_ContentHost"/>
+                                <TextBlock Text="Search instruments..." Foreground="#777" Margin="10,12,0,0" IsHitTestVisible="False">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header & Search -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="Knowledge Base" FontSize="32" FontWeight="Bold" Foreground="White"/>
+                <TextBlock Text="Browse the comprehensive library of surgical tools." Foreground="{StaticResource BrushTextSecondary}" FontSize="16" Margin="0,5,0,0"/>
+            </StackPanel>
+
+            <TextBox Grid.Column="1" 
+                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                 Style="{StaticResource SearchTextBoxStyle}" VerticalAlignment="Center"/>
+        </Grid>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="320"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- List Panel -->
+            <Border Grid.Column="0" Background="{StaticResource BrushSurface}" CornerRadius="10" Margin="0,0,20,0">
+                <ListBox ItemsSource="{Binding InstrumentsView}" 
+                     SelectedItem="{Binding SelectedInstrument}"
+                     Background="Transparent" BorderThickness="0" Padding="10">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Margin" Value="0,0,0,8"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border x:Name="Card" Background="{StaticResource BrushSurfaceLight}" CornerRadius="8" Padding="10" Cursor="Hand">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="50"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Background="White" CornerRadius="4" Height="40" Width="40">
+                                                    <Image Source="{Binding FullImagePath}" Stretch="Uniform" Margin="2"/>
+                                                </Border>
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10,0,0,0">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="White" FontSize="14"/>
+                                                    <TextBlock Text="{Binding Category}" Foreground="{StaticResource BrushTextSecondary}" FontSize="12"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="Card" Property="Background" Value="{StaticResource BrushAccent}"/>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Card" Property="Background" Value="#444"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </Border>
+
+            <!-- Detail Panel -->
+            <Border Grid.Column="1" Background="{StaticResource BrushSurface}" CornerRadius="10" Padding="30">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <Grid DataContext="{Binding SelectedInstrument}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Large Image -->
+                        <Border Grid.Row="0" Height="250" Background="#FFF" CornerRadius="10" Margin="0,0,0,20">
+                            <Image Source="{Binding FullImagePath}" Stretch="Uniform" Margin="20"/>
+                        </Border>
+
+                        <!-- Titles -->
+                        <StackPanel Grid.Row="1">
+                            <TextBlock Text="{Binding Name}" FontSize="36" FontWeight="Bold" Foreground="White"/>
+                            <Border Background="{StaticResource BrushAccent}" HorizontalAlignment="Left" CornerRadius="4" Padding="8,4" Margin="0,10,0,20">
+                                <TextBlock Text="{Binding Category}" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Description -->
+                        <TextBlock Grid.Row="2" Text="Description" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushAccentHighlight}" Margin="0,0,0,10"/>
+                        <TextBlock Grid.Row="2" Text="{Binding Description}" FontSize="16" Foreground="{StaticResource BrushTextPrimary}" TextWrapping="Wrap" LineHeight="24" Margin="0,30,0,30"/>
+
+                        <!-- Details Grid -->
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Aliases -->
+                            <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                                <TextBlock Text="Aliases" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushAccentHighlight}" Margin="0,0,0,10"/>
+                                <ItemsControl ItemsSource="{Binding Aliases}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="{StaticResource BrushSurfaceLight}" Padding="10,5" CornerRadius="4" Margin="0,0,0,5" HorizontalAlignment="Left">
+                                                <TextBlock Text="{Binding}" Foreground="White"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+
+                            <!-- Key Features -->
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Key Features" FontSize="18" FontWeight="Bold" Foreground="{StaticResource BrushAccentHighlight}" Margin="0,0,0,10"/>
+                                <ItemsControl ItemsSource="{Binding KeyFeatures}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="0,0,0,8">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Ellipse Width="6" Height="6" Fill="{StaticResource BrushAccent}" VerticalAlignment="Top" Margin="0,8,10,0"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding}" Foreground="{StaticResource BrushTextPrimary}" TextWrapping="Wrap"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

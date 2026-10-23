@@ -1,0 +1,54 @@
+[
+  {
+    "Id": 1,
+    "Name": "Scalpel",
+    "Category": "Cutting and Dissecting",
+    "Description": "A small and extremely sharp bladed instrument used for surgery, anatomical dissection. Scalpels may be single-use disposable or re-usable.",
+    "ImagePath": "Assets/Images/Scalpel.jpg",
+    "Aliases": [ "Surgical knife", "Bistoury" ],
+    "KeyFeatures": [
+      "Extremely sharp single-edged blade.",
+      "Handle can be reusable with disposable blades.",
+      "Used for making initial incisions and cutting tissue."
+    ]
+  },
+  {
+    "Id": 2,
+    "Name": "Straight Mayo Scissor",
+    "Category": "Cutting and Dissecting",
+    "Description": "A type of surgical scissor, often used for cutting sutures (hence the common nickname 'suture scissors'). They are also used for cutting heavy tissues like fascia.",
+    "ImagePath": "Assets/Images/straight_mayo_scissor.jpg",
+    "Aliases": [ "Suture scissors" ],
+    "KeyFeatures": [
+      "Heavy scissors with straight, semi-blunt blades.",
+      "Ideal for cutting surface-level tissues and sutures.",
+      "Less common for deep tissue dissection."
+    ]
+  },
+  {
+    "Id": 3,
+    "Name": "Curved Mayo Scissor",
+    "Category": "Cutting and Dissecting",
+    "Description": "Used to cut thick tissues such as those found in the uterus, muscles, breast, and foot. The curved design allows for deeper penetration into the wound.",
+    "ImagePath": "Assets/Images/curved_mayo_scissor.jpg",
+    "Aliases": [],
+    "KeyFeatures": [
+      "Curved blades that match the contour of the body.",
+      "Allows for better visualization and precision in deep wounds.",
+      "Heavier than most scissors for cutting tough tissue."
+    ]
+  },
+  {
+    "Id": 4,
+    "Name": "Metzenbaum Scissors",
+    "Category": "Cutting and Dissecting",
+    "Description": "Surgical scissors designed for cutting delicate tissue and blunt dissection. The scissors come in variable lengths and have a relatively long shank-to-blade ratio.",
+    "ImagePath": "Assets/Images/metzenbaum_scissors.jpg",
+    "Aliases": [ "Metz" ],
+    "KeyFeatures": [
+      "Long shanks and short, delicate blades.",
+      "Blunt or pointed tips.",
+      "Used for fine dissection and cutting of soft tissues."
+    ]
+  }
+]
