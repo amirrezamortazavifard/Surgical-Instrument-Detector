@@ -4,7 +4,7 @@
 [![.NET Version](https://img.shields.io/badge/.NET-8.0-blueviolet.svg)](https://dotnet.microsoft.com/)
 [![C# Version](https://img.shields.io/badge/C%23-12-blue.svg)](https://learn.microsoft.com/en-us/dotnet/csharp/)
 [![Python Version](https://img.shields.io/badge/Python-3.9+-brightgreen.svg)](https://www.python.org/)
-[![Status](https://img.shields.io/badge/Status-Completed-success.svg)](https://github.com/am-mortazavifard/Surgical-Detector)
+[![Status](https://img.shields.io/badge/Status-Completed-success.svg)](https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector)
 
 An intelligent desktop application for the **real-time detection** of surgical instruments using a **YOLOv11** AI model and a modern user interface built with **C# (WPF)**.
 
@@ -81,8 +81,8 @@ To run this project, you will need the following prerequisites:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/amirrezamortazavifard/surgical-detector.git](https://github.com/amirrezamortazavifard/surgical-detector.git)
-    cd surgical-detector
+    git clone https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector.git
+    cd Surgical-Instrument-Detector
     ```
 
 2.  **Set up the Python environment (Optional - for re-training the model):**
@@ -99,13 +99,46 @@ To run this project, you will need the following prerequisites:
     * **Rebuild the solution** (from the menu: Build > Rebuild Solution).
     * Press **F5** or the Start button to run the application.
 
+## 🧠 AI Model & Training Pipeline
+
+* **Base Model Architecture:** Custom fine-tuned **YOLOv11** object detection neural network.
+* **Inference Format:** Exported to **ONNX (Open Neural Network Exchange)** format for high-throughput, cross-platform execution via `Microsoft.ML.OnnxRuntime` inside C# without requiring a local Python runtime.
+* **Input Resolution & Optimization:** 640x640 letterbox preprocessing with OpenCV image normalization and optimized non-maximum suppression (NMS).
+
 ---
 
-## 🧠 AI Model Details
+## 📂 Dataset & Clinical Corpus
 
-* **Base Model:** The project uses a **YOLOv11** object detection model.
-* **Dataset:** The images used for training were sourced from **Kaggle**.
-* **Final Format:** After training, the model was converted to the **ONNX (Open Neural Network Exchange)** format. This allows the model to be run on various platforms, including in a C# environment, with high performance and without a dependency on Python.
+The model was trained, validated, and evaluated on the publicly available **Labeled Surgical Tools and Images** dataset hosted on Kaggle:
+
+[![Kaggle Dataset](https://img.shields.io/badge/Kaggle-Labeled_Surgical_Tools-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/dilavado/labeled-surgical-tools)
+
+| Metadata Attribute | Description / Value |
+| :--- | :--- |
+| **Dataset Title** | [Labeled Surgical Tools and Images](https://www.kaggle.com/datasets/dilavado/labeled-surgical-tools) |
+| **Original Author & Curator** | **Danilo Lavado** ([@dilavado](https://www.kaggle.com/dilavado)) |
+| **Hosting Platform** | Kaggle Datasets |
+| **Dataset Scope** | 3,009 surgical scene images with high-fidelity bounding box annotations & occlusion labels |
+| **Classes of Cleaned Tools** | `Scalpel`, `Straight Dissection Clamp`, `Straight Mayo Scissor`, `Curved Mayo Scissor` |
+| **Clinical Value** | Facilitates accurate object detection, instrument accounting, and robotic-assisted surgical tracking |
+
+---
+
+## 🙏 Acknowledgments & Intellectual Attribution
+
+We express our sincere gratitude and acknowledge **Danilo Lavado** ([@dilavado](https://www.kaggle.com/dilavado)) for collecting, annotating, and generously publishing the **Labeled Surgical Tools and Images** dataset to the open-source and medical AI community. His contribution is fundamental to empowering open academic research, computer vision benchmarking, and intelligent surgical assistant applications.
+
+If you utilize this repository or the trained weights in your research, please ensure appropriate attribution to the underlying dataset:
+
+```bibtex
+@misc{dilavado_surgical_tools,
+  author       = {Danilo Lavado},
+  title        = {Labeled Surgical Tools and Images},
+  year         = {2024},
+  publisher    = {Kaggle},
+  howpublished = {\url{https://www.kaggle.com/datasets/dilavado/labeled-surgical-tools}}
+}
+```
 
 ---
 
