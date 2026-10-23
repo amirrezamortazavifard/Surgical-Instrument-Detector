@@ -1,134 +1,207 @@
-# Surgical Tool Detector 🩺🤖
+# Surgical Instrument Detector
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![.NET Version](https://img.shields.io/badge/.NET-8.0-blueviolet.svg)](https://dotnet.microsoft.com/)
-[![C# Version](https://img.shields.io/badge/C%23-12-blue.svg)](https://learn.microsoft.com/en-us/dotnet/csharp/)
-[![Python Version](https://img.shields.io/badge/Python-3.9+-brightgreen.svg)](https://www.python.org/)
-[![Status](https://img.shields.io/badge/Status-Completed-success.svg)](https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![.NET Version](https://img.shields.io/badge/.NET-8.0--Windows-512BD4.svg?logo=dotnet)](https://dotnet.microsoft.com/)
+[![C# Version](https://img.shields.io/badge/C%23-12-239120.svg?logo=csharp)](https://learn.microsoft.com/en-us/dotnet/csharp/)
+[![Inference Engine](https://img.shields.io/badge/Inference-ONNX%20Runtime%201.22-005BA1.svg?logo=onnx)](https://onnxruntime.ai/)
+[![Model Architecture](https://img.shields.io/badge/Architecture-YOLOv11-00FFFF.svg)](https://github.com/ultralytics/ultralytics)
+[![Dataset](https://img.shields.io/badge/Kaggle-Labeled_Surgical_Tools-20BEFF.svg?logo=kaggle)](https://www.kaggle.com/datasets/dilavado/labeled-surgical-tools)
+[![Release](https://img.shields.io/github/v/release/amirrezamortazavifard/Surgical-Instrument-Detector?color=success)](https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector/releases/latest)
 
-An intelligent desktop application for the **real-time detection** of surgical instruments using a **YOLOv11** AI model and a modern user interface built with **C# (WPF)**.
-
-This project was developed with the goal of increasing accuracy and speed in surgical environments, and also serves as a powerful educational example of integrating a Python-based AI workflow with high-performance .NET applications.
-
-
----
-
-## ✨ Core Features
-
-* **Dual Detection Modes:**
-    * **Image-Based Detection:** Analyze static image files (`.jpg`, `.png`, etc.).
-    * **Live Camera Detection:** Process a real-time video feed from any connected webcam.
-* **Multi-Camera Support:** Automatically detects all connected cameras and allows the user to choose their desired device.
-* **Powerful AI Model:** Utilizes a custom-trained **YOLOv11** model, exported to the **ONNX** format for maximum performance and compatibility.
-* **Modern & Responsive UI:**
-    * Built with **WPF**, featuring a dark theme inspired by surgical environments.
-    * AI processing runs on a background thread to prevent UI freezing and ensure a smooth, responsive experience.
-* **Graphical Result Visualization:** Renders bounding boxes, class labels, and confidence scores clearly and colorfully on the image or live video feed.
+An enterprise-grade computer vision desktop application for real-time surgical instrument detection and tracking. Built with C# and WPF on .NET 8, the system integrates a custom-trained YOLOv11 deep learning model running directly on Microsoft ONNX Runtime alongside a clinical assistant and an instrument reference database.
 
 ---
 
-## 🏗️ Project Architecture
+## Table of Contents
 
-This project is divided into two main, independent parts:
+- [Overview](#overview)
+- [Key Features](#key-features)
+- [Architecture](#architecture)
+- [Inference Visualizations](#inference-visualizations)
+- [Application Interface](#application-interface)
+- [Technology Stack](#technology-stack)
+- [Installation and Setup](#installation-and-setup)
+- [Model Training Pipeline](#model-training-pipeline)
+- [Dataset and Attribution](#dataset-and-attribution)
+- [Repository Structure](#repository-structure)
+- [Author and Contact](#author-and-contact)
+- [License](#license)
 
-1.  **Part 1: AI Model Training (in the `python/` folder)**
-    * This section contains all the Python scripts for preparing the dataset, training the **YOLOv11** model, and finally exporting the trained model to the `.onnx` format.
-    * This entire workflow is built using Python and the PyTorch framework.
+---
 
-2.  **Part 2: Desktop Application (in the `SurgicalDetector/` folder)**
-    * The core application and its user interface, written in **C#** with the **WPF** framework.
-    * C# was chosen for this part due to its **superior performance for building responsive desktop applications** compared to Python.
-    * The application loads and executes the `.onnx` model generated in the first part to perform inference.
+## Overview
+
+Accurate tracking and verification of surgical instruments is critical for operating room safety, count verification, and surgical workflow analytics. This repository provides an end-to-end implementation spanning:
+
+1. **AI Model Engineering:** Data preparation, training, validation, and export of YOLOv11 object detection weights to the open standard ONNX format.
+2. **Medical Desktop Application:** A multi-threaded .NET 8 WPF application built on the MVVM (Model-View-ViewModel) architectural pattern, utilizing DirectShow hardware camera capture, OpenCvSharp4 image processing, and local GPU/CPU hardware acceleration via ONNX Runtime.
+
+---
+
+## Key Features
+
+- **Dual Detection Modalities:**
+  - **Live Camera Stream:** Continuous high-framerate inference across connected USB, endoscopic, or built-in camera hardware.
+  - **Static Image Analysis:** High-resolution single or batch image processing with detection confidence scoring and bounding box rendering.
+- **Hardware Agnostic Acceleration:** Leverages ONNX Runtime execution providers to deliver responsive frame rates without external Python runtime dependencies.
+- **Dynamic Parameter Tuning:** Real-time sliders for confidence thresholding and Non-Maximum Suppression (NMS) Intersection-over-Union (IoU) overlap control.
+- **Baymax Clinical AI Assistant:** Built-in multimodal medical assistant designed for protocol lookup, surgical instrument discussions, and procedure context.
+- **Interactive Instrument Catalog:** Structured database detailing common surgical tools (scalpels, curved and straight Mayo scissors, Metzenbaum scissors, dissection clamps), sterilization parameters, and clinical indications.
+- **Operational Telemetry:** Session statistics, instrument frequency distributions, and detection history tracking.
+
+---
+
+## Architecture
+
+The solution separates model development and runtime desktop execution into decoupled sub-systems:
 
 ```
-surgical-detector/
-├── 📂 python/              # Part 1: AI Model Training
-│   ├── train.py
-│   ├── data.yaml
-│   ├── test.py
-│   └── ...
-└── 📂 SurgicalDetector/     # Part 2: C# Desktop Application
-    ├── SurgicalDetector.sln
-    ├── SurgicalDetector/
-    └── ...
+Surgical-Instrument-Detector/
+├── Python/                        # Training & Validation Subsystem
+│   ├── prepare_and_evaluate.py    # Dataset formatting & metric pipelines
+│   ├── run_test_evaluation.py     # Batch test evaluation runner
+│   ├── data.yaml                  # Class mappings and dataset split definitions
+│   └── YOLO_Result/               # Training metrics, PR curves, and weights
+│
+└── SurgicalDetector/              # Production C# Desktop Application
+    └── SurgicalDetector/
+        ├── Views/                 # WPF XAML views (Live, Image, Chat, Catalog)
+        ├── ViewModels/            # MVVM ViewModels with reactive data binding
+        ├── Services/              # ONNX inference, camera capture, telemetry
+        ├── Models/                # Detection entities, instrument definitions
+        ├── Infrastructure/        # Command delegates, value converters
+        └── best.onnx              # Optimized model weights for runtime inference
 ```
 
 ---
 
-## 🛠️ Technology Stack
+## Inference Visualizations
 
-* **AI & Model Training (Python):**
-    * ![Python](https://img.shields.io/badge/Python-3.9-blue.svg?logo=python)
-    * ![PyTorch](https://img.shields.io/badge/PyTorch-2.0-ee4c2c.svg?logo=pytorch)
-    * **YOLOv11**
-    * OpenCV-Python
+Demonstrating trained model inference on sample surgical scene images from the validation set:
 
-* **Desktop Application (C#):**
-    * ![CSharp](https://img.shields.io/badge/C%23-12-purple.svg?logo=c-sharp)
-    * **.NET 8**
-    * **Windows Presentation Foundation (WPF)**
-    * **Microsoft.ML.OnnxRuntime:** For running ONNX models.
-    * **OpenCvSharp4:** For image processing and camera interoperability.
+| Sample Input | Model Detection Output |
+| :---: | :---: |
+| ![Sample Input 1](Images/Test/test_image.jpg) | ![Sample Output 1](Images/Result/test_image.jpg) |
+| ![Sample Input 2](Images/Test/test_image1.jpg) | ![Sample Output 2](Images/Result/test_image1.jpg) |
+| ![Sample Input 3](Images/Test/test_image2.jpg) | ![Sample Output 3](Images/Result/test_image2.jpg) |
 
 ---
 
-## 🚀 Setup and Installation
+## Application Interface
 
-To run this project, you will need the following prerequisites:
-* **.NET 8.0 SDK**
-* **Python 3.9** or higher
-* **Visual Studio 2022** with the ".NET desktop development" workload installed.
+The desktop application user interface is divided into functional modules:
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector.git
-    cd Surgical-Instrument-Detector
-    ```
+| View / Module | Primary Functionality | Interface Screenshot |
+| :--- | :--- | :---: |
+| **Live Camera Detection** | Hardware camera feed, real-time bounding box overlay, FPS & tool counter | ![Live Detection](docs/screenshots/live-detection.png) |
+| **Static Image Detection** | High-resolution image analysis, adjustable confidence & NMS thresholds | ![Image Detection](docs/screenshots/image-detection.png) |
+| **Baymax Clinical Assistant** | Multimodal conversational interface for surgical guidance and query analysis | ![Baymax Assistant](docs/screenshots/baymax-chat.png) |
+| **Instrument Catalog** | Database of surgical instruments, handling specifications, and clinical usage | ![Instruments Catalog](docs/screenshots/instruments-catalog.png) |
+| **Analytics Dashboard** | Detection telemetry, usage charts, and instrument frequency metrics | ![Analytics](docs/screenshots/analytics-dashboard.png) |
 
-2.  **Set up the Python environment (Optional - for re-training the model):**
-    ```bash
-    cd python
-    pip install -r requirements.txt
-    # To train the model, run the training script
-    python train.py
-    ```
-
-3.  **Set up the C# Application (Main Program):**
-    * Open the `SurgicalDetector/` folder and double-click `SurgicalDetector.sln` to open it in Visual Studio 2022.
-    * Visual Studio will automatically restore the required NuGet packages.
-    * **Rebuild the solution** (from the menu: Build > Rebuild Solution).
-    * Press **F5** or the Start button to run the application.
-
-## 🧠 AI Model & Training Pipeline
-
-* **Base Model Architecture:** Custom fine-tuned **YOLOv11** object detection neural network.
-* **Inference Format:** Exported to **ONNX (Open Neural Network Exchange)** format for high-throughput, cross-platform execution via `Microsoft.ML.OnnxRuntime` inside C# without requiring a local Python runtime.
-* **Input Resolution & Optimization:** 640x640 letterbox preprocessing with OpenCV image normalization and optimized non-maximum suppression (NMS).
+> Note: To customize interface screenshots, save high-resolution PNG images matching the filenames indicated above inside the `docs/screenshots/` directory.
 
 ---
 
-## 📂 Dataset & Clinical Corpus
+## Technology Stack
 
-The model was trained, validated, and evaluated on the publicly available **Labeled Surgical Tools and Images** dataset hosted on Kaggle:
+### Desktop Application (.NET / C#)
+- **Framework:** .NET 8.0 (Windows Presentation Foundation)
+- **Architecture:** MVVM (Model-View-ViewModel) with Dependency Injection (`Microsoft.Extensions.DependencyInjection`)
+- **Inference Runtime:** `Microsoft.ML.OnnxRuntime` 1.22
+- **Computer Vision:** `OpenCvSharp4` & `OpenCvSharp4.runtime.win`
+- **Design System:** Custom dark-themed surgical monitor styling with high-contrast UI components
 
-[![Kaggle Dataset](https://img.shields.io/badge/Kaggle-Labeled_Surgical_Tools-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/dilavado/labeled-surgical-tools)
+### Machine Learning & Training (Python)
+- **Deep Learning Framework:** PyTorch & Ultralytics YOLOv11
+- **Model Format:** ONNX (Open Neural Network Exchange)
+- **Data Processing:** OpenCV-Python, NumPy, Scikit-learn
 
-| Metadata Attribute | Description / Value |
+---
+
+## Installation and Setup
+
+### Option A: Pre-built Binary (Recommended for Users)
+1. Navigate to the [Releases](https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector/releases/latest) page.
+2. Download the latest standalone archive: `SurgicalDetector-v2.1.0-win-x64.zip`.
+3. Extract the contents to a local folder on Windows 10 or 11 (x64).
+4. Launch `SurgicalDetector.exe`.
+
+### Option B: Building from Source (Developers)
+
+#### Prerequisites
+- Windows 10 or 11 (x64)
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [Visual Studio 2022](https://visualstudio.microsoft.com/) with the **.NET Desktop Development** workload installed
+
+#### Build Instructions
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector.git
+   cd Surgical-Instrument-Detector
+   ```
+2. Open the solution file in Visual Studio:
+   ```bash
+   start SurgicalDetector/SurgicalDetector.sln
+   ```
+3. Restore dependencies and compile:
+   ```powershell
+   dotnet restore SurgicalDetector/SurgicalDetector.sln
+   dotnet build SurgicalDetector/SurgicalDetector.sln -c Release
+   ```
+4. Run the application:
+   ```powershell
+   dotnet run --project SurgicalDetector/SurgicalDetector/SurgicalDetector.csproj -c Release
+   ```
+
+---
+
+## Model Training Pipeline
+
+To retrain or fine-tune the model:
+
+1. Configure Python environment:
+   ```bash
+   cd Python
+   python -m venv venv
+   .\venv\Scripts\activate
+   pip install ultralytics opencv-python pyyaml
+   ```
+2. Prepare the dataset splits according to `data.yaml`.
+3. Execute model training:
+   ```bash
+   python train.py
+   ```
+4. Export the resulting PyTorch weights (`best.pt`) to ONNX:
+   ```python
+   from ultralytics import YOLO
+   model = YOLO("runs/detect/train/weights/best.pt")
+   model.export(format="onnx", imgsz=640, opset=12)
+   ```
+5. Place the exported `best.onnx` file into `SurgicalDetector/SurgicalDetector/`.
+
+---
+
+## Dataset and Attribution
+
+The object detection model was trained and evaluated using the **Labeled Surgical Tools and Images** dataset hosted on Kaggle:
+
+[![Kaggle Dataset](https://img.shields.io/badge/Kaggle-Labeled_Surgical_Tools-20BEFF.svg?style=for-the-badge&logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/dilavado/labeled-surgical-tools)
+
+### Dataset Specifications
+
+| Attribute | Specification |
 | :--- | :--- |
 | **Dataset Title** | [Labeled Surgical Tools and Images](https://www.kaggle.com/datasets/dilavado/labeled-surgical-tools) |
-| **Original Author & Curator** | **Danilo Lavado** ([@dilavado](https://www.kaggle.com/dilavado)) |
-| **Hosting Platform** | Kaggle Datasets |
-| **Dataset Scope** | 3,009 surgical scene images with high-fidelity bounding box annotations & occlusion labels |
-| **Classes of Cleaned Tools** | `Scalpel`, `Straight Dissection Clamp`, `Straight Mayo Scissor`, `Curved Mayo Scissor` |
-| **Clinical Value** | Facilitates accurate object detection, instrument accounting, and robotic-assisted surgical tracking |
+| **Author / Curator** | **Danilo Lavado** ([@dilavado](https://www.kaggle.com/dilavado)) |
+| **Platform** | Kaggle |
+| **Sample Size** | 3,009 surgical scene images with high-resolution bounding boxes |
+| **Annotation Scope** | Object detection bounding boxes and occlusion labeling |
+| **Target Classes** | `Scalpel`, `Straight Dissection Clamp`, `Straight Mayo Scissor`, `Curved Mayo Scissor` |
 
----
+### Scholarly Citation
 
-## 🙏 Acknowledgments & Intellectual Attribution
-
-We express our sincere gratitude and acknowledge **Danilo Lavado** ([@dilavado](https://www.kaggle.com/dilavado)) for collecting, annotating, and generously publishing the **Labeled Surgical Tools and Images** dataset to the open-source and medical AI community. His contribution is fundamental to empowering open academic research, computer vision benchmarking, and intelligent surgical assistant applications.
-
-If you utilize this repository or the trained weights in your research, please ensure appropriate attribution to the underlying dataset:
+We express our gratitude to **Danilo Lavado** for making this labeled surgical dataset openly available for medical computer vision research. If you reference this work or dataset in academic research, please cite the original author:
 
 ```bibtex
 @misc{dilavado_surgical_tools,
@@ -142,27 +215,29 @@ If you utilize this repository or the trained weights in your research, please e
 
 ---
 
-## 🗂️ Repository Contents
+## Repository Structure
 
-This is a complete and comprehensive repository. By cloning it, you will have access to all of the following:
-* All **C# and Python source code.**
-* The project's **binary and executable files.**
-* The final, ready-to-use **`best.onnx` model.**
-* **Model training results and logs** (e.g., loss and accuracy charts).
-
----
-
-## 👤 Creator
-
-**Amirreza Mortazavi Fard (Amir Fard)**
-
-* **Telegram:** [@ReallyFard](https://t.me/reallyFard)
-* **GitHub:** [@amirrezamortazavifard](https://github.com/amirrezamortazavifard)
-* **LinkedIn:** [Amirreza Mortazavi Fard](https://www.linkedin.com/in/amir-reza-mortazavi-fard-892874368/)
-* **Email:** [mortazavi.a.stu@gmu.ac.ir](mailto:mortazavi.a.stu@gmu.ac.ir)
+| Path | Description |
+| :--- | :--- |
+| `SurgicalDetector/` | .NET 8 WPF application source code, views, viewmodels, and assets |
+| `Python/` | Dataset utilities, training configs, evaluation routines, and model metrics |
+| `Images/Test/` | Raw test images for evaluation and manual verification |
+| `Images/Result/` | Ground-truth and model inference output visualizations |
+| `docs/screenshots/` | High-resolution UI screenshots for documentation |
 
 ---
 
-## 📜 License
+## Author and Contact
 
-This project is licensed under the **MIT License**. See the `LICENSE` file for details.
+**Amirreza Mortazavi Fard**
+
+- **GitHub:** [@amirrezamortazavifard](https://github.com/amirrezamortazavifard)
+- **LinkedIn:** [Amirreza Mortazavi Fard](https://www.linkedin.com/in/amir-reza-mortazavi-fard-892874368/)
+- **Telegram:** [@ReallyFard](https://t.me/reallyFard)
+- **Email:** [mortazavi.a.stu@gmu.ac.ir](mailto:mortazavi.a.stu@gmu.ac.ir)
+
+---
+
+## License
+
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for complete details.
