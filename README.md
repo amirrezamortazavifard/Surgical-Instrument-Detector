@@ -8,7 +8,7 @@
 [![Dataset](https://img.shields.io/badge/Kaggle-Labeled_Surgical_Tools-20BEFF.svg?logo=kaggle)](https://www.kaggle.com/datasets/dilavado/labeled-surgical-tools)
 [![Release](https://img.shields.io/github/v/release/amirrezamortazavifard/Surgical-Instrument-Detector?color=success)](https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector/releases/latest)
 
-An enterprise-grade computer vision desktop application for real-time surgical instrument detection and tracking. Built with C# and WPF on .NET 8, the system integrates a custom-trained YOLOv11 deep learning model running directly on Microsoft ONNX Runtime alongside a clinical assistant and an instrument reference database.
+An open-source computer vision research desktop application for surgical instrument object detection, clinical instrument catalog reference, and AI-assisted consultation. Built with C# and WPF on .NET 8, the system integrates a custom-trained YOLOv11 deep learning model running locally via Microsoft ONNX Runtime alongside a clinical reference database and an optional conversational assistant.
 
 ---
 
@@ -16,12 +16,13 @@ An enterprise-grade computer vision desktop application for real-time surgical i
 
 - [Overview](#overview)
 - [Key Features](#key-features)
+- [Scientific Documentation](#scientific-documentation)
 - [Architecture](#architecture)
 - [Inference Visualizations](#inference-visualizations)
 - [Application Interface](#application-interface)
 - [Technology Stack](#technology-stack)
 - [Installation and Setup](#installation-and-setup)
-- [Model Training Pipeline](#model-training-pipeline)
+- [Model Training and Export Pipeline](#model-training-and-export-pipeline)
 - [Dataset and Attribution](#dataset-and-attribution)
 - [Repository Structure](#repository-structure)
 - [Author and Contact](#author-and-contact)
@@ -31,23 +32,37 @@ An enterprise-grade computer vision desktop application for real-time surgical i
 
 ## Overview
 
-Accurate tracking and verification of surgical instruments is critical for operating room safety, count verification, and surgical workflow analytics. This repository provides an end-to-end implementation spanning:
+Accurate tracking and verification of surgical instruments is critical for surgical education, count verification, and computer-assisted workflow analytics. This repository provides an end-to-end, scientifically reproducible implementation spanning:
 
-1. **AI Model Engineering:** Data preparation, training, validation, and export of YOLOv11 object detection weights to the open standard ONNX format.
-2. **Medical Desktop Application:** A multi-threaded .NET 8 WPF application built on the MVVM (Model-View-ViewModel) architectural pattern, utilizing DirectShow hardware camera capture, OpenCvSharp4 image processing, and local GPU/CPU hardware acceleration via ONNX Runtime.
+1. **AI Model Engineering:** Data audit, deterministic partitioning, training, validation, and ONNX graph export of a YOLOv11 object detector across 4 instrument classes.
+2. **Desktop Research Application:** A multi-threaded .NET 8 WPF application built on the MVVM (Model-View-ViewModel) architectural pattern, utilizing DirectShow hardware camera capture, OpenCvSharp4 image processing, bounded latest-frame real-time streaming, and local inference via Microsoft ONNX Runtime.
 
 ---
 
 ## Key Features
 
 - **Dual Detection Modalities:**
-  - **Live Camera Stream:** Continuous high-framerate inference across connected USB, endoscopic, or built-in camera hardware.
-  - **Static Image Analysis:** High-resolution single or batch image processing with detection confidence scoring and bounding box rendering.
-- **Hardware Agnostic Acceleration:** Leverages ONNX Runtime execution providers to deliver responsive frame rates without external Python runtime dependencies.
-- **Dynamic Parameter Tuning:** Real-time sliders for confidence thresholding and Non-Maximum Suppression (NMS) Intersection-over-Union (IoU) overlap control.
-- **Baymax Clinical AI Assistant:** Built-in multimodal medical assistant designed for protocol lookup, surgical instrument discussions, and procedure context.
-- **Interactive Instrument Catalog:** Structured database detailing common surgical tools (scalpels, curved and straight Mayo scissors, Metzenbaum scissors, dissection clamps), sterilization parameters, and clinical indications.
-- **Operational Telemetry:** Session statistics, instrument frequency distributions, and detection history tracking.
+  - **Live Camera Stream:** Bounded latest-frame streaming across connected USB, endoscopic, or built-in camera hardware, maintaining a responsive UI preview without frame queue backlog.
+  - **Static Image Analysis:** Single-image analysis with real-time detection confidence scoring, class-aware Non-Maximum Suppression (NMS), and annotated bounding-box rendering.
+- **Embedded Inference Runtime:** Leverages Microsoft ONNX Runtime C# API to run model graphs directly within the .NET runtime without external Python runtime dependencies.
+- **Dynamic Parameter Tuning:** Real-time sliders in the application Settings view for confidence thresholding, NMS IoU overlap control, and execution provider configuration.
+- **Baymax Clinical AI Assistant:** Conversational medical interface utilizing Google Gemini REST API (`gemini-2.5-flash`) with optional image context for protocol lookup and surgical instrument discussions.
+- **Interactive Instrument Catalog:** In-memory structured reference database detailing common surgical tools (scalpels, curved and straight Mayo scissors, Metzenbaum scissors, dissection clamps), sterilization parameters, and clinical indications.
+- **Operational Telemetry:** Session statistics, detection latency tracking, and instrument frequency metrics.
+
+---
+
+## Scientific Documentation
+
+Comprehensive technical documentation adhering to scientific software publication standards is available in the [`docs/`](docs/) directory:
+
+- [**Software Architecture (`docs/architecture.md`)**](docs/architecture.md): Module decomposition, MVVM design, dependency injection, and Mermaid pipeline flowcharts.
+- [**Scientific Reproducibility Guide (`docs/reproducibility.md`)**](docs/reproducibility.md): Deterministic environment prerequisites, dataset splits, training flags, export commands, and test suite execution.
+- [**Scientific Limitations & Scope (`docs/limitations.md`)**](docs/limitations.md): Four-class taxonomy boundaries, intraoperative domain gap, CPU throughput constraints, and missing clinical evidence.
+- [**Comprehensive Engineering Audit (`docs/engineering-audit.md`)**](docs/engineering-audit.md): Systematic audit of baseline security, vision correctness, and reliability defects with verification evidence.
+- [**Research Methods Draft (`docs/research-methods.md`)**](docs/research-methods.md): Manuscript-ready Methods section draft with verified hyperparameters, mathematical letterboxing formulation, and explicit unmeasured placeholders.
+- [**Empirical Benchmarking Protocol (`docs/benchmarking.md`)**](docs/benchmarking.md): Monotonic timing protocol, telemetry schemas, and observed execution provider benchmarks.
+- [**Security Configuration Guide (`docs/security-configuration.md`)**](docs/security-configuration.md): Multi-tier credential resolution and API key management instructions.
 
 ---
 
@@ -57,27 +72,33 @@ The solution separates model development and runtime desktop execution into deco
 
 ```
 Surgical-Instrument-Detector/
-├── Python/                        # Training & Validation Subsystem
-│   ├── prepare_and_evaluate.py    # Dataset formatting & metric pipelines
-│   ├── run_test_evaluation.py     # Batch test evaluation runner
-│   ├── data.yaml                  # Class mappings and dataset split definitions
-│   └── YOLO_Result/               # Training metrics, PR curves, and weights
+├── Python/                        # Offline Training, Validation & Export Subsystem
+│   ├── train.py                   # YOLOv11 training script with configurable CLI arguments
+│   ├── train_test_val_split.py    # Deterministic dataset partitioner with fixed seed
+│   ├── validate_dataset.py        # Automated annotation integrity and leakage auditor
+│   ├── run_test_evaluation.py     # Independent test set evaluator exporting JSON/CSV
+│   ├── export.py                  # ONNX graph exporter with numerical parity validation
+│   ├── benchmark_inference.py     # Standalone empirical latency and FPS benchmark runner
+│   ├── data.yaml                  # Class mappings and relative dataset split paths
+│   └── tests/                     # 15 automated Python unit tests
 │
-└── SurgicalDetector/              # Production C# Desktop Application
-    └── SurgicalDetector/
-        ├── Views/                 # WPF XAML views (Live, Image, Chat, Catalog)
-        ├── ViewModels/            # MVVM ViewModels with reactive data binding
-        ├── Services/              # ONNX inference, camera capture, telemetry
-        ├── Models/                # Detection entities, instrument definitions
-        ├── Infrastructure/        # Command delegates, value converters
-        └── best.onnx              # Optimized model weights for runtime inference
+└── SurgicalDetector/              # Online C# Desktop Application (.NET 8 WPF)
+    ├── SurgicalDetector/
+    │   ├── Views/                 # WPF XAML views (Live, Image, Chat, Catalog, Settings)
+    │   ├── ViewModels/            # MVVM ViewModels with INavigationAware lifecycle
+    │   ├── Services/              # ONNX inference, camera capture, telemetry, Gemini REST
+    │   ├── Models/                # Detection entities, instrument catalog, inference options
+    │   ├── Infrastructure/        # Secure config service, command delegates, converters
+    │   └── best.onnx              # Exported YOLOv11 ONNX graph (11.2 MB)
+    │
+    └── SurgicalDetector.Tests/    # 28 automated C# / xUnit unit tests
 ```
 
 ---
 
 ## Inference Visualizations
 
-Demonstrating trained model inference on sample surgical scene images from the validation set:
+Trained model inference demonstrated on surgical scene images from the validation set:
 
 | Sample Input | Model Detection Output |
 | :---: | :---: |
@@ -93,13 +114,11 @@ The desktop application user interface is divided into functional modules:
 
 | View / Module | Primary Functionality | Interface Screenshot |
 | :--- | :--- | :---: |
-| **Live Camera Detection** | Hardware camera feed, real-time bounding box overlay, FPS & tool counter | ![Live Detection](docs/screenshots/live-detection.png) |
-| **Static Image Detection** | High-resolution image analysis, adjustable confidence & NMS thresholds | ![Image Detection](docs/screenshots/image-detection.png) |
-| **Baymax Clinical Assistant** | Multimodal conversational interface for surgical guidance and query analysis | ![Baymax Assistant](docs/screenshots/baymax-chat.png) |
-| **Instrument Catalog** | Database of surgical instruments, handling specifications, and clinical usage | ![Instruments Catalog](docs/screenshots/instruments-catalog.png) |
-| **Analytics Dashboard** | Detection telemetry, usage charts, and instrument frequency metrics | ![Analytics](docs/screenshots/analytics-dashboard.png) |
-
-> Note: To customize interface screenshots, save high-resolution PNG images matching the filenames indicated above inside the `docs/screenshots/` directory.
+| **Live Camera Detection** | DirectShow camera feed, latest-frame bounding box overlay, FPS & latency telemetry | ![Live Detection](docs/screenshots/live-detection.png) |
+| **Static Image Detection** | High-resolution image analysis, adjustable confidence & class-aware NMS thresholds | ![Image Detection](docs/screenshots/image-detection.png) |
+| **Baymax Clinical Assistant** | Conversational interface for surgical guidance, tool discussion, and image analysis | ![Baymax Assistant](docs/screenshots/baymax-chat.png) |
+| **Instrument Catalog** | Reference database of surgical instruments, handling specifications, and clinical indications | ![Instruments Catalog](docs/screenshots/instruments-catalog.png) |
+| **Settings & Providers** | Execution provider status, confidence/IoU sliders, and secure Gemini API configuration | ![Settings](docs/screenshots/analytics-dashboard.png) |
 
 ---
 
@@ -107,56 +126,48 @@ The desktop application user interface is divided into functional modules:
 
 ### Desktop Application (.NET / C#)
 - **Framework:** .NET 8.0 (Windows Presentation Foundation)
-- **Architecture:** MVVM (Model-View-ViewModel) with Dependency Injection (`Microsoft.Extensions.DependencyInjection`)
-- **Inference Runtime:** `Microsoft.ML.OnnxRuntime` 1.22
-- **Computer Vision:** `OpenCvSharp4` & `OpenCvSharp4.runtime.win`
-- **Design System:** Custom dark-themed surgical monitor styling with high-contrast UI components
+- **Architecture:** MVVM (Model-View-ViewModel) with Inversion of Control (`Microsoft.Extensions.DependencyInjection`)
+- **Inference Runtime:** `Microsoft.ML.OnnxRuntime` 1.22.0 (CPU execution package; CPU provider default)
+- **Computer Vision:** `OpenCvSharp4` (4.10.0) with Windows DirectShow capture backend
+- **Styling:** Custom high-contrast dark theme optimized for clinical monitor visibility
 
 ### Machine Learning & Training (Python)
-- **Deep Learning Framework:** PyTorch & Ultralytics YOLOv11
-- **Model Format:** ONNX (Open Neural Network Exchange)
-- **Data Processing:** OpenCV-Python, NumPy, Scikit-learn
+- **Deep Learning Framework:** PyTorch 2.11 & Ultralytics YOLOv11 (v8.4.33)
+- **Model Format:** ONNX (Open Neural Network Exchange, Opset 19)
+- **Data Processing:** OpenCV-Python, NumPy, PyYAML
 
 ---
 
 ## Installation and Setup
 
-### Option A: Pre-built Binary (Recommended for Users)
-1. Navigate to the [Releases](https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector/releases/latest) page.
-2. Download the latest standalone archive: `SurgicalDetector-v2.1.0-win-x64.zip`.
-3. Extract the contents to a local folder on Windows 10 or 11 (x64).
-4. Launch `SurgicalDetector.exe`.
-
-### Option B: Building from Source (Developers)
-
-#### Prerequisites
-- Windows 10 or 11 (x64)
+### Prerequisites
+- Windows 10 (1809+) or Windows 11 (64-bit x64)
 - [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
-- [Visual Studio 2022](https://visualstudio.microsoft.com/) with the **.NET Desktop Development** workload installed
+- [Visual Studio 2022](https://visualstudio.microsoft.com/) or .NET CLI
 
-#### Build Instructions
+### Build and Run Instructions
 1. Clone the repository:
    ```bash
    git clone https://github.com/amirrezamortazavifard/Surgical-Instrument-Detector.git
    cd Surgical-Instrument-Detector
    ```
-2. Open the solution file in Visual Studio:
-   ```bash
-   start SurgicalDetector/SurgicalDetector.sln
-   ```
-3. Restore dependencies and compile:
+2. Restore dependencies and compile solution:
    ```powershell
    dotnet restore SurgicalDetector/SurgicalDetector.sln
    dotnet build SurgicalDetector/SurgicalDetector.sln -c Release
    ```
-4. Run the application:
+3. Run automated tests (28 unit tests):
+   ```powershell
+   dotnet test SurgicalDetector/SurgicalDetector.sln
+   ```
+4. Run the desktop application:
    ```powershell
    dotnet run --project SurgicalDetector/SurgicalDetector/SurgicalDetector.csproj -c Release
    ```
 
 ---
 
-## Model Training Pipeline
+## Model Training and Export Pipeline
 
 To retrain or fine-tune the model:
 
@@ -165,20 +176,20 @@ To retrain or fine-tune the model:
    cd Python
    python -m venv venv
    .\venv\Scripts\activate
-   pip install ultralytics opencv-python pyyaml
+   pip install torch torchvision ultralytics opencv-python onnx onnxruntime pyyaml numpy pillow
    ```
-2. Prepare the dataset splits according to `data.yaml`.
+2. Validate dataset annotations and split integrity:
+   ```bash
+   python validate_dataset.py --data data.yaml --strict
+   ```
 3. Execute model training:
    ```bash
-   python train.py
+   python train.py --model yolo11l.pt --data data.yaml --epochs 100 --batch 16 --imgsz 640
    ```
 4. Export the resulting PyTorch weights (`best.pt`) to ONNX:
-   ```python
-   from ultralytics import YOLO
-   model = YOLO("runs/detect/train/weights/best.pt")
-   model.export(format="onnx", imgsz=640, opset=12)
+   ```bash
+   python export.py --model YOLO_Result/weights/best.pt --imgsz 640 --opset 19 --simplify --output ../SurgicalDetector/SurgicalDetector/best.onnx
    ```
-5. Place the exported `best.onnx` file into `SurgicalDetector/SurgicalDetector/`.
 
 ---
 
@@ -195,13 +206,11 @@ The object detection model was trained and evaluated using the **Labeled Surgica
 | **Dataset Title** | [Labeled Surgical Tools and Images](https://www.kaggle.com/datasets/dilavado/labeled-surgical-tools) |
 | **Author / Curator** | **Danilo Lavado** ([@dilavado](https://www.kaggle.com/dilavado)) |
 | **Platform** | Kaggle |
-| **Sample Size** | 3,009 surgical scene images with high-resolution bounding boxes |
-| **Annotation Scope** | Object detection bounding boxes and occlusion labeling |
+| **Sample Size** | 2,620 surgical scene images with 3,640 annotated bounding boxes |
+| **Annotation Scope** | Planar 2D bounding boxes |
 | **Target Classes** | `Scalpel`, `Straight Dissection Clamp`, `Straight Mayo Scissor`, `Curved Mayo Scissor` |
 
 ### Scholarly Citation
-
-We express our gratitude to **Danilo Lavado** for making this labeled surgical dataset openly available for medical computer vision research. If you reference this work or dataset in academic research, please cite the original author:
 
 ```bibtex
 @misc{dilavado_surgical_tools,
@@ -219,11 +228,11 @@ We express our gratitude to **Danilo Lavado** for making this labeled surgical d
 
 | Path | Description |
 | :--- | :--- |
-| `SurgicalDetector/` | .NET 8 WPF application source code, views, viewmodels, and assets |
-| `Python/` | Dataset utilities, training configs, evaluation routines, and model metrics |
-| `Images/Test/` | Raw test images for evaluation and manual verification |
+| `SurgicalDetector/` | .NET 8 WPF application source code, views, viewmodels, and tests |
+| `Python/` | Dataset utilities, training configs, evaluation routines, export script, and benchmarks |
+| `Images/Test/` | Test images for evaluation and manual verification |
 | `Images/Result/` | Ground-truth and model inference output visualizations |
-| `docs/screenshots/` | High-resolution UI screenshots for documentation |
+| `docs/` | Scientific architecture, reproducibility, limitations, methods, and audit documentation |
 
 ---
 

@@ -1,8 +1,10 @@
-﻿namespace SurgicalDetector
+using SurgicalDetector.Infrastructure;
+
+namespace SurgicalDetector
 {
     public static class AppConfig
     {
-        public const string ApiKey = "AIzaSyC1LRh7WzyT_r4vcf_JJ8BFGdJoCW4MK7o";
+        public static string ApiKey => ConfigurationService.Instance.GeminiApiKey;
         public const string BaseUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
       
     public static string GetBaymaxPrompt(string instrument, string category, string lang)

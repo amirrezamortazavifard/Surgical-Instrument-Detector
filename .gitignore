@@ -211,5 +211,23 @@ AGENTS.md
 # Large Datasets & Local Training Runs
 Python/datasets/
 Python/runs/
+runs/
 Python/surg/
-Python/*.txt
+Python/*.txt
+Python/inference_results/
+inference_results/
+
+
+# Local secrets & user configs
+config.json
+appsettings.json
+appsettings.*.json
+!appsettings.example.json
+!config.example.json
+local.json
+*.local.json
+secrets.json
+.env
+.env.*
+!.env.example
+

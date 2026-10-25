@@ -1,0 +1,5 @@
+class_id,class_name,train,val,test,total
+0,Scalpel,537,100,273,910
+1,Straight Dissection Clamp,533,104,273,910
+2,Straight Mayo Scissor,541,96,272,909
+3,Curved Mayo Scissor,535,102,274,911

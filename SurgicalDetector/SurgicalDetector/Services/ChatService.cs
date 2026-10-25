@@ -1,4 +1,4 @@
-﻿using SurgicalDetector.Models;
+using SurgicalDetector.Models;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -12,11 +12,36 @@ namespace SurgicalDetector.Services
       
     public ChatService()
         {
-            _storagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Chats");
-            if (!Directory.Exists(_storagePath))
+            var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            _storagePath = !string.IsNullOrWhiteSpace(localAppData)
+                ? Path.Combine(localAppData, "SurgicalDetector", "Chats")
+                : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Chats");
+
+            try
             {
-                Directory.CreateDirectory(_storagePath);
+                var legacyPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Chats");
+                if (Directory.Exists(legacyPath) && !string.Equals(legacyPath, _storagePath, StringComparison.OrdinalIgnoreCase))
+                {
+                    Directory.CreateDirectory(_storagePath);
+                    foreach (var file in Directory.GetFiles(legacyPath, "*.json"))
+                    {
+                        var dest = Path.Combine(_storagePath, Path.GetFileName(file));
+                        if (!File.Exists(dest)) File.Copy(file, dest);
+                    }
+                }
+
+                if (!Directory.Exists(_storagePath))
+                {
+                    Directory.CreateDirectory(_storagePath);
+                }
             }
+            catch
+            {
+                // Fall back gracefully to base directory if AppData is not writable
+                _storagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "Chats");
+                if (!Directory.Exists(_storagePath)) Directory.CreateDirectory(_storagePath);
+            }
+
             _httpClient = new HttpClient();
         }
 
@@ -60,6 +85,11 @@ namespace SurgicalDetector.Services
 
         public async Task<string> GetAiResponseAsync(List<ChatMessage> history, string newMessage, string imageBase64 = null)
         {
+            if (string.IsNullOrWhiteSpace(AppConfig.ApiKey))
+            {
+                return "Baymax: Gemini API key is not configured. Please configure your API key in Settings or set the GEMINI_API_KEY environment variable.";
+            }
+
             try
             {
                 var contents = new List<object>();

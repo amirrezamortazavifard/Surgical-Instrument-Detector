@@ -1,0 +1,6 @@
+class_name,ground_truth_count,precision,recall,mAP50,mAP50_95
+Scalpel,273,0.9912,0.9521,0.9895,0.9421
+Straight Dissection Clamp,273,0.9885,0.9380,0.9860,0.9350
+Straight Mayo Scissor,272,0.9870,0.9395,0.9871,0.9372
+Curved Mayo Scissor,274,0.9901,0.9375,0.9882,0.9397
+ALL_CLASSES_AGGREGATE,1092,0.9892,0.9418,0.9877,0.9385

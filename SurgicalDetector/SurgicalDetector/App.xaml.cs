@@ -1,16 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using SurgicalDetector.Services;
 using SurgicalDetector.ViewModels;
 using System;
 using System.Windows;
+
 namespace SurgicalDetector
 {
     public partial class App : Application
     {
-        public static IServiceProvider ServiceProvider { get; private set; }
+        public static IServiceProvider ServiceProvider { get; private set; } = null!;
         public static int GlobalScanCount { get; set; } = 0;
-      
-    public App()
+
+        public App()
         {
             var services = new ServiceCollection();
             ConfigureServices(services);
@@ -26,14 +27,15 @@ namespace SurgicalDetector
             services.AddSingleton<ICameraService, OpenCvCameraService>();
             services.AddSingleton<IGenAIService, BaymaxAiService>();
             services.AddSingleton<IChatService, ChatService>();
+            services.AddSingleton<Infrastructure.IConfigurationService>(Infrastructure.ConfigurationService.Instance);
 
             services.AddSingleton<ShellViewModel>();
-            services.AddTransient<ImageDetectionViewModel>();
-            services.AddTransient<LiveDetectionViewModel>();
-            services.AddTransient<InstrumentDatabaseViewModel>();
-            services.AddTransient<SettingsViewModel>();
-            services.AddTransient<AboutViewModel>();
-            services.AddTransient<ChatViewModel>();
+            services.AddSingleton<ImageDetectionViewModel>();
+            services.AddSingleton<LiveDetectionViewModel>();
+            services.AddSingleton<InstrumentDatabaseViewModel>();
+            services.AddSingleton<SettingsViewModel>();
+            services.AddSingleton<AboutViewModel>();
+            services.AddSingleton<ChatViewModel>();
 
             services.AddSingleton<MainWindow>();
         }
@@ -43,6 +45,24 @@ namespace SurgicalDetector
             base.OnStartup(e);
             var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            try
+            {
+                var cameraService = ServiceProvider?.GetService<ICameraService>();
+                cameraService?.Dispose();
+
+                var liveVm = ServiceProvider?.GetService<LiveDetectionViewModel>();
+                liveVm?.Dispose();
+
+                var detectionService = ServiceProvider?.GetService<IDetectionService>() as IDisposable;
+                detectionService?.Dispose();
+            }
+            catch { }
+
+            base.OnExit(e);
         }
     }
 }

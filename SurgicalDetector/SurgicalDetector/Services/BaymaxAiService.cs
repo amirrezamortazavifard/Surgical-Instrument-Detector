@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -16,6 +16,13 @@ namespace SurgicalDetector.Services
 
         public async Task<string> GetClinicalAnalysisAsync(string instrumentName, string category, string lang)
         {
+            if (string.IsNullOrWhiteSpace(AppConfig.ApiKey))
+            {
+                return lang == "fa"
+                    ? "هشدار بیمکس: کلید Gemini API تنظیم نشده است. لطفاً کلید API خود را در بخش تنظیمات یا از طریق متغیر محیطی GEMINI_API_KEY وارد نمایید."
+                    : "Baymax Alert: Gemini API key is not configured. Please configure your API key in Settings or set the GEMINI_API_KEY environment variable.";
+            }
+
             try
             {
                 var systemPrompt = AppConfig.GetBaymaxPrompt(instrumentName, category, lang);

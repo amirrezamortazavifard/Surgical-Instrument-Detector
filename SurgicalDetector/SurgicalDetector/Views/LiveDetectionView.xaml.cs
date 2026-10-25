@@ -1,4 +1,4 @@
-﻿using SurgicalDetector.ViewModels;
+using SurgicalDetector.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -16,7 +16,7 @@ namespace SurgicalDetector.Views
         {
             if (DataContext is LiveDetectionViewModel vm)
             {
-                vm.Dispose();
+                vm.OnNavigatedFrom();
             }
         }
     }

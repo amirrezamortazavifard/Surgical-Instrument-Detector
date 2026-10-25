@@ -4,7 +4,7 @@ names:
 - Straight Mayo Scissor
 - Curved Mayo Scissor
 nc: 4
-path: D:\Sergury\Surgical\Surgical-Instrument-Detector\Python\datasets\surg
+path: datasets/surg
 test: images/test
 train: images/train
 val: images/val

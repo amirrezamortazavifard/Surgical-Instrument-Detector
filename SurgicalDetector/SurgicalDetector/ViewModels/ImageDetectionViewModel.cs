@@ -1,4 +1,4 @@
-﻿using SurgicalDetector.Infrastructure;
+using SurgicalDetector.Infrastructure;
 using SurgicalDetector.Models;
 using SurgicalDetector.Services;
 using System;
@@ -107,7 +107,7 @@ namespace SurgicalDetector.ViewModels
                     DetectedItems.Add(item);
                 }
 
-                var finalBitmap = DrawDetections(originalBitmap, detections);
+                using var finalBitmap = DrawDetections(originalBitmap, detections);
                 ResultImageSource = ConvertBitmapToBitmapImage(finalBitmap);
                 HasResults = DetectedItems.Count > 0;
             }

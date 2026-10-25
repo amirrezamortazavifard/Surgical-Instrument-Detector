@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Globalization;
 using System.Windows;
@@ -10,6 +10,10 @@ namespace SurgicalDetector.Infrastructure
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is string s)
+            {
+                return !string.IsNullOrWhiteSpace(s) ? Visibility.Visible : Visibility.Collapsed;
+            }
             if (value is ICollection collection)
             {
                 return collection.Count > 0 ? Visibility.Visible : Visibility.Collapsed;

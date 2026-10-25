@@ -1,0 +1,7 @@
+{
+  "GeminiApiKey": "",
+  "ConfidenceThreshold": 0.5,
+  "NmsThreshold": 0.45,
+  "UseLetterbox": true,
+  "ExecutionProvider": "CPU"
+}

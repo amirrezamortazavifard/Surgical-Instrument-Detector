@@ -1,0 +1,91 @@
+{
+  "metadata": {
+    "timestamp": "2026-10-25T23:18:01.724074+00:00",
+    "data_yaml": "D:\\My Fucking Projects\\Sergury\\Surgical\\Surgical-Instrument-Detector\\Python\\data.yaml",
+    "dataset_root": "D:\\My Fucking Projects\\Sergury\\Surgical\\Surgical-Instrument-Detector\\Python\\datasets\\surg",
+    "classes": [
+      "Scalpel",
+      "Straight Dissection Clamp",
+      "Straight Mayo Scissor",
+      "Curved Mayo Scissor"
+    ],
+    "taxonomy_matches_expected": true
+  },
+  "summary": {
+    "total_images": 2620,
+    "total_labels": 2620,
+    "total_errors": 0,
+    "data_leakage_detected": false
+  },
+  "splits": {
+    "train": {
+      "image_count": 1558,
+      "label_count": 1558,
+      "paired_count": 1558,
+      "missing_labels": [],
+      "orphaned_labels": [],
+      "class_distribution": {
+        "Scalpel": 537,
+        "Straight Dissection Clamp": 533,
+        "Straight Mayo Scissor": 541,
+        "Curved Mayo Scissor": 535
+      },
+      "class_counts_by_id": {
+        "0": 537,
+        "1": 533,
+        "2": 541,
+        "3": 535
+      },
+      "invalid_sample_count": 0,
+      "invalid_samples": []
+    },
+    "val": {
+      "image_count": 276,
+      "label_count": 276,
+      "paired_count": 276,
+      "missing_labels": [],
+      "orphaned_labels": [],
+      "class_distribution": {
+        "Scalpel": 100,
+        "Straight Dissection Clamp": 104,
+        "Straight Mayo Scissor": 96,
+        "Curved Mayo Scissor": 102
+      },
+      "class_counts_by_id": {
+        "0": 100,
+        "1": 104,
+        "2": 96,
+        "3": 102
+      },
+      "invalid_sample_count": 0,
+      "invalid_samples": []
+    },
+    "test": {
+      "image_count": 786,
+      "label_count": 786,
+      "paired_count": 786,
+      "missing_labels": [],
+      "orphaned_labels": [],
+      "class_distribution": {
+        "Scalpel": 273,
+        "Straight Dissection Clamp": 273,
+        "Straight Mayo Scissor": 272,
+        "Curved Mayo Scissor": 274
+      },
+      "class_counts_by_id": {
+        "0": 273,
+        "1": 273,
+        "2": 272,
+        "3": 274
+      },
+      "invalid_sample_count": 0,
+      "invalid_samples": []
+    }
+  },
+  "partition_overlaps": {
+    "train_vs_val": [],
+    "train_vs_test": [],
+    "val_vs_test": []
+  },
+  "validation_errors": []
+}

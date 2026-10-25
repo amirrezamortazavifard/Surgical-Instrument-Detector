@@ -1,4 +1,4 @@
-﻿<Application x:Class="SurgicalDetector.App"
+<Application x:Class="SurgicalDetector.App"
 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 xmlns:local="clr-namespace:SurgicalDetector"
@@ -9,6 +9,7 @@ xmlns:infra="clr-namespace:SurgicalDetector.Infrastructure">
         <infra:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <infra:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <infra:NotNullToVisibilityConverter x:Key="NotNullToVisibilityConverter"/>
+        <infra:NullOrEmptyToVisibilityConverter x:Key="NullOrEmptyToVisibilityConverter"/>
 
         <!-- COLOR PALETTE (UNCHANGED) -->
         <Color x:Key="ColorPrimaryDark">#1E1E1E</Color>
