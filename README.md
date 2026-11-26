@@ -10,6 +10,10 @@
 
 An open-source computer vision research desktop application for surgical instrument object detection, clinical instrument catalog reference, and AI-assisted consultation. Built with C# and WPF on .NET 8, the system integrates a custom-trained YOLOv11 deep learning model running locally via Microsoft ONNX Runtime alongside a clinical reference database and an optional conversational assistant.
 
+<p align="center">
+  <img src="docs/banner.jpg" alt="I-Set — Surgical Instrument Detector Banner" width="100%" />
+</p>
+
 ---
 
 ## Table of Contents
